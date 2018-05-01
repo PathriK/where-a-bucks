@@ -1,16 +1,14 @@
-import { ExpenseCategory, ITransaction } from "../types";
+import { ActionType, IAddTransaction, ITransaction, TAction } from "../types";
 
-const initialState: ITransaction[] = [
-    {
-        id: 132456,
-        date: "01-05-2018",
-        order: 1,
-        name: "Testing",
-        amount: 90.98,
-        category: ExpenseCategory.OFFICE,
-        isExpense: true
-    }
-]
-export const transactions = (state: ITransaction[] = initialState, action: any) => {
-    return state;
+export const transactions = (state: ITransaction[] = [], action: TAction) => {
+    switch (action.type) {
+        case ActionType.ADD_TRANSACTION:
+            return [
+                ...state,
+                (action as IAddTransaction).transaction
+            ];
+        
+        default:
+            return state;
+    }    
 }
