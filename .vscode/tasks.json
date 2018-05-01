@@ -19,6 +19,15 @@
                     "endsPattern": "^.*Compiled successfully!.*$"
                 },
             }
-        }
+        },
+        {
+            "label": "linting",
+            "type": "npm",
+            "script": "lint",
+            "problemMatcher": {
+                "base": "$tslint5",
+                "fileLocation": "relative"
+            }
+        }        
     ]
 }
