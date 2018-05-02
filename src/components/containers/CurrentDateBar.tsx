@@ -10,6 +10,6 @@ const mapStateToProps = (state: IState): IStateToProps => ({
     date: state.currentDate
 });
 
-const currentDateBar = connect(mapStateToProps)(DateBar);
+const CurrentDateBar = connect(mapStateToProps)(DateBar);
 
-export default currentDateBar;
+export default CurrentDateBar;
