@@ -1,6 +1,5 @@
 import { connect } from "react-redux";
 import { IState } from "../../types";
-import { utils } from "../../utilities/stateUtils";
 import BalanceBar from "../BalanceBar";
 
 interface IStateToProps {
@@ -8,16 +7,12 @@ interface IStateToProps {
 }
 
 const mapStateToProps = (state: IState): IStateToProps => {
-   return {
-        total: utils.getTransByDate(state).reduce((total, transaction) => {
-                if (transaction.isExpense) {
-                    total = total + transaction.amount;
-                } else {
-                    total = total - transaction.amount;
-                }
-            return total;
-        }, 0)
+    const balance = state.balance[state.currentDate];
+    let total = 0;
+    if (balance && balance.transactionAmount){
+        total = balance.transactionAmount;
     }
+   return { total }
 };
 
 const CurrentBalanceBar = connect(mapStateToProps)(BalanceBar);

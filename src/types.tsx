@@ -37,10 +37,22 @@ export interface ITransactionsByDate {
     [key: string]: TTransactionID[]
 }
 
+export interface IBalance {
+    prevBalance: number,
+    transactionAmount: number,
+    currentBalance: number,
+    finalBalance: number
+}
+
+export interface IBalanceByDate {
+    [key: string]: IBalance
+}
+
 export interface IState {
     currentDate: string,
     transactions: {
         byID: ITransactionsByID
         byDate: ITransactionsByDate
-    }
+    },
+    balance: IBalanceByDate
 }
