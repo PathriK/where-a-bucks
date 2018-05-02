@@ -5,7 +5,7 @@ import { createStore } from 'redux';
 import App from './App';
 import './index.css';
 import bucksApp from './reducers';
-import registerServiceWorker from './registerServiceWorker';
+import registerServiceWorker from './utilities/registerServiceWorker';
 
 const store = createStore(bucksApp);
 ReactDOM.render(

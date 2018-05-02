@@ -12,10 +12,12 @@ export interface IAddTransaction {
 }
 
 export type TAction = IAddTransaction;
+export type TTransactionID = number;
+export type TDate = string;
 
 export interface ITransaction {
-    id: number,
-    date: string,
+    id: TTransactionID,
+    date: TDate,
     order: number,
     name: string,
     amount: number,
@@ -27,7 +29,18 @@ export interface ITransactionList  {
     transactions: ITransaction[]
 }
 
+export interface ITransactionsByID{
+    [key: number]: ITransaction
+}
+
+export interface ITransactionsByDate {
+    [key: string]: TTransactionID[]
+}
+
 export interface IState {
     currentDate: string,
-    transactions: ITransaction[]
+    transactions: {
+        byID: ITransactionsByID
+        byDate: ITransactionsByDate
+    }
 }

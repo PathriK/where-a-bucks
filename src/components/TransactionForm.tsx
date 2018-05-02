@@ -30,7 +30,7 @@ const TransactionForm: React.SFC<ITransactionForm> = ({date, onTransactionSubmit
         name.value = '';
         amount.value = '';
         category.value = '';
-        name.checked = false;
+        isExpense.checked = false;
     }
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();

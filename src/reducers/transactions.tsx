@@ -1,14 +1,40 @@
-import { ActionType, IAddTransaction, ITransaction, TAction } from "../types";
+import { combineReducers } from "redux";
+import { ActionType, IAddTransaction, ITransactionsByDate, ITransactionsByID, TAction, TTransactionID } from "../types";
 
-export const transactions = (state: ITransaction[] = [], action: TAction) => {
+const byID = (state: ITransactionsByID = {}, action: TAction) => {
     switch (action.type) {
         case ActionType.ADD_TRANSACTION:
-            return [
+            const transaction = (action as IAddTransaction).transaction;
+            return {
                 ...state,
-                (action as IAddTransaction).transaction
-            ];
+                [transaction.id]: transaction
+            };
         
         default:
             return state;
     }    
 }
+
+const addTransactionByDate = (state: ITransactionsByDate, action: IAddTransaction): ITransactionsByDate => {
+    const {id, date} = action.transaction;
+    const transactionIDs:TTransactionID[] = state[date] ? state[date] : [];
+    return {
+        ...state,
+        [date]: transactionIDs.concat(id)
+    };
+}
+
+const byDate = (state: ITransactionsByDate = {}, action: TAction) => {
+    switch (action.type) {
+        case ActionType.ADD_TRANSACTION:
+            return addTransactionByDate(state, action);
+    
+        default:
+            return state;
+    }
+}
+
+export const transactions = combineReducers({
+    byDate,
+    byID
+});
