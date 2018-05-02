@@ -1,20 +1,43 @@
-import { connect } from "react-redux";
-import { IState } from "../../types";
+import { connect, Dispatch } from "react-redux";
+import { updateCurrentBal } from "../../actions";
+import { IState, IUpdateCurrentBal } from "../../types";
 import BalanceBar from "../BalanceBar";
 
 interface IStateToProps {
-    total: number
+    currentBalance: number,
+    diffAmount: number,
+    total: number,
+    date: string
 }
 
 const mapStateToProps = (state: IState): IStateToProps => {
     const balance = state.balance[state.currentDate];
     let total = 0;
-    if (balance && balance.transactionAmount){
-        total = balance.transactionAmount;
-    }
-   return { total }
+    let currentBalance = 0;
+    let prevBalance = 0;
+    if (balance) {
+        if (balance.transactionAmount) {
+            total = balance.transactionAmount
+        }
+        if (balance.currentBalance){
+            currentBalance = balance.currentBalance;
+        }
+        if (balance.prevBalance){
+            prevBalance = balance.prevBalance;
+        }
+    }    
+    const diffAmount = (prevBalance - currentBalance) - total;
+   return { currentBalance, diffAmount, total, date: state.currentDate }
 };
 
-const CurrentBalanceBar = connect(mapStateToProps)(BalanceBar);
+interface IDispatchToProps {
+    onCurrentChange: (currentBalance: number, date: string) => void
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<IUpdateCurrentBal>): IDispatchToProps => ({
+    onCurrentChange: (currentBalance: number, date: string) => dispatch(updateCurrentBal(currentBalance, date))
+});
+
+const CurrentBalanceBar = connect(mapStateToProps, mapDispatchToProps)(BalanceBar);
 
 export default CurrentBalanceBar;

@@ -3,7 +3,8 @@ export enum ExpenseCategory {
 }
 
 export enum ActionType {
-    ADD_TRANSACTION = "ADD_EXPENSE"
+    ADD_TRANSACTION = "ADD_TRANSACTION",
+    UPDATE_CURRENT_BALANCE = "UPDATE_CURRENT_BALANCE"
 }
 
 export interface IAddTransaction {
@@ -11,7 +12,13 @@ export interface IAddTransaction {
     transaction: ITransaction
 }
 
-export type TAction = IAddTransaction;
+export interface IUpdateCurrentBal {
+    type: ActionType.UPDATE_CURRENT_BALANCE,
+    date: TDate,
+    amount: number
+}
+
+export type TAction = IAddTransaction | IUpdateCurrentBal;
 export type TTransactionID = number;
 export type TDate = string;
 
