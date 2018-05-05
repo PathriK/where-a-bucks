@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import { IState } from "../../types";
+import momentUtils from "../../utilities/momentUtils";
 import DateBar from "../DateBar";
 
 interface IStateToProps {
@@ -7,7 +8,7 @@ interface IStateToProps {
 }
 
 const mapStateToProps = (state: IState): IStateToProps => ({
-    date: state.currentDate
+    date: momentUtils.getDispayStr(state.currentDate)
 });
 
 const CurrentDateBar = connect(mapStateToProps)(DateBar);

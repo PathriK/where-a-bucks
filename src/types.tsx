@@ -56,7 +56,7 @@ export interface IBalanceByDate {
 }
 
 export interface IState {
-    currentDate: string,
+    currentDate: TDate,
     transactions: {
         byID: ITransactionsByID
         byDate: ITransactionsByDate

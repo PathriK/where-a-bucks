@@ -1,5 +1,6 @@
-import { TAction } from "../types";
+import { TAction, TDate } from "../types";
+import momentUtils from '../utilities/momentUtils';
 
-export const currentDate = (state: string = "01-05-2018", action: TAction) => {
+export const currentDate = (state: TDate = momentUtils.getTodayDtStr(), action: TAction) => {
     return state;
 }
