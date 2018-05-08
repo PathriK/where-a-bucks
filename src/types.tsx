@@ -4,12 +4,19 @@ export enum ExpenseCategory {
 
 export enum ActionType {
     ADD_TRANSACTION = "ADD_TRANSACTION",
+    EDIT_TRANSACTION = "EDIT_TRANSACTION",
+    UPDATE_TRANSACTION = "UPDATE_TRANSACTION",
     UPDATE_CURRENT_BALANCE = "UPDATE_CURRENT_BALANCE"
 }
 
-export interface IAddTransaction {
-    type: ActionType.ADD_TRANSACTION,
+export interface ITransAddUpd {
+    type: ActionType.ADD_TRANSACTION | ActionType.UPDATE_TRANSACTION,
     transaction: ITransaction
+}
+
+export interface ITransEditDel {
+    type: ActionType.EDIT_TRANSACTION,
+    transactionID: TTransactionID
 }
 
 export interface IUpdateCurrentBal {
@@ -18,8 +25,9 @@ export interface IUpdateCurrentBal {
     amount: number
 }
 
-export type TAction = IAddTransaction | IUpdateCurrentBal;
+export type TAction = ITransAddUpd | ITransEditDel | IUpdateCurrentBal;
 export type TTransactionID = number;
+export type TOrderID = number;
 export type TDate = string;
 
 export interface ITransaction {
@@ -55,11 +63,14 @@ export interface IBalanceByDate {
     [key: string]: IBalance
 }
 
-export interface IState {
+export interface IRootState {
     currentDate: TDate,
+    nextTransID: TTransactionID,
+    nextOrderID: TOrderID,
     transactions: {
         byID: ITransactionsByID
         byDate: ITransactionsByDate
     },
+    editTransID: TTransactionID,
     balance: IBalanceByDate
 }

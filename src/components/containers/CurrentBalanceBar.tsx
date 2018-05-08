@@ -1,6 +1,6 @@
 import { connect, Dispatch } from "react-redux";
 import { updateCurrentBal } from "../../actions";
-import { IState, IUpdateCurrentBal } from "../../types";
+import { IRootState, IUpdateCurrentBal } from "../../types";
 import BalanceBar from "../BalanceBar";
 
 interface IStateToProps {
@@ -10,7 +10,7 @@ interface IStateToProps {
     date: string
 }
 
-const mapStateToProps = (state: IState): IStateToProps => {
+const mapStateToProps = (state: IRootState): IStateToProps => {
     const balance = state.balance[state.currentDate];
     let total = 0;
     let currentBalance = 0;

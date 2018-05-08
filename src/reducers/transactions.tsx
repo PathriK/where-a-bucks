@@ -1,10 +1,11 @@
 import { combineReducers } from "redux";
-import { ActionType, IAddTransaction, ITransactionsByDate, ITransactionsByID, TAction, TTransactionID } from "../types";
+import { ActionType, ITransactionsByDate, ITransactionsByID, ITransAddUpd, TAction, TTransactionID } from "../types";
 
 const byID = (state: ITransactionsByID = {}, action: TAction) => {
     switch (action.type) {
         case ActionType.ADD_TRANSACTION:
-            const transaction = (action as IAddTransaction).transaction;
+        case ActionType.UPDATE_TRANSACTION:
+            const transaction = (action as ITransAddUpd).transaction;
             return {
                 ...state,
                 [transaction.id]: transaction
@@ -15,7 +16,7 @@ const byID = (state: ITransactionsByID = {}, action: TAction) => {
     }    
 }
 
-const addTransactionByDate = (state: ITransactionsByDate, action: IAddTransaction): ITransactionsByDate => {
+const addTransactionByDate = (state: ITransactionsByDate, action: ITransAddUpd): ITransactionsByDate => {
     const {id, date} = action.transaction;
     const transactionIDs:TTransactionID[] = state[date] ? state[date] : [];
     return {

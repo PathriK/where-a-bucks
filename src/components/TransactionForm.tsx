@@ -2,75 +2,113 @@ import * as React from 'react';
 import { ExpenseCategory, ITransaction } from '../types';
 
 interface ITransactionForm {
-    date: string,
-    onTransactionSubmit(transaction: ITransaction): void
+    transaction: ITransaction,
+    isEditMode: boolean,
+    onTransactionSubmit: (transaction: ITransaction) => void,
+    onTransactionUpdate: (transaction: ITransaction) => void
 }
 
-const TransactionForm: React.SFC<ITransactionForm> = ({date, onTransactionSubmit}) => {    
-    const formID = (): number => {
-        return Date.now();
+const TransactionForm: React.ComponentClass<ITransactionForm> = class extends React.Component<ITransactionForm, ITransaction> {
+
+    public static getDerivedStateFromProps(nextProps: ITransactionForm, prevState: ITransaction) {
+        if (nextProps.transaction.id !== prevState.id) {
+            return nextProps.transaction;
+        }
+        return null;
     }
-    const getOrder = (): number => {
-        return 1;
-    }
-    let name: HTMLInputElement;
-    let amount: HTMLInputElement;
-    let category: HTMLSelectElement;
-    let isExpense: HTMLInputElement;
-    const formAddData = (): ITransaction => ({
-        id: formID(),
-        date,
-        order: getOrder(),
-        name: name.value,
-        amount: parseFloat(amount.value),
-        category: ExpenseCategory[category.value],
-        isExpense: isExpense.checked
-    });
-    const clearFields = () => {
-        name.value = '';
-        amount.value = '';
-        category.value = '';
-        isExpense.checked = false;
-    }
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-        e.preventDefault();
-        onTransactionSubmit(formAddData());
-        clearFields();
+        
+    constructor(props: ITransactionForm) {
+        super(props);
+        this.state = props.transaction;
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <label>
-                Name:
-                <input
-                type="text"
-                ref={(node: HTMLInputElement) => name = node} />
-            </label>
-            <label>
-                Amount:
-                <input
-                type="number"
-                step="0.01"
-                ref={(node: HTMLInputElement) => amount = node} />
-            </label>
-            <label>
-                Category:
-                <select
-                ref={(node: HTMLSelectElement) => category = node}>
-                {Object.keys(ExpenseCategory).map(key => (
-                    <option key={key} value={key}>{ExpenseCategory[key]}</option>
-                ))}
-                </select>
-            </label>
-            <label>
-                Is an Expense?
-                <input
-                type="checkbox"
-                ref={(node: HTMLInputElement) => isExpense = node} />
-            </label>
-            <input type="submit" value="Submit" />
-        </form>        
-    );
+    public render() {
+        return this.form();
+      }    
+
+    private handleInputChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+        const target = event.target;
+        const name = target.name;
+        switch (name) {
+            case "name":
+                this.setState({name: target.value})
+                break;
+
+            case "amount":
+                let amount = parseFloat(target.value);
+                if (!isFinite(amount)){
+                    amount = 0;
+                }
+                this.setState({amount});
+                break;
+
+            case "category":
+                this.setState({category: ExpenseCategory[target.value]})
+                break;
+
+            case "isExpense":
+                this.setState({isExpense: (target as EventTarget & HTMLInputElement).checked})
+                break;
+        }
+      }    
+
+      private handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        if(this.props.isEditMode) {
+            this.props.onTransactionUpdate(this.state);
+        } else {
+            this.props.onTransactionSubmit(this.state);
+        }
+      }
+      
+      private form() {
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <label>
+                    Name:
+                    <input
+                    type="text"
+                    onChange={this.handleInputChange}
+                    value={this.state.name}
+                    name="name" />
+                </label>
+                <label>
+                    Amount:
+                    <input
+                    type="number"
+                    step="0.01"
+                    onChange={this.handleInputChange}
+                    value={this.state.amount}
+                    name="amount"/>
+                </label>
+                <label>
+                    Category:
+                    <select
+                    onChange={this.handleInputChange}
+                    value={this.state.category}
+                    name="category">
+                    {Object.keys(ExpenseCategory).map(key => (
+                        <option key={key} value={key}>{ExpenseCategory[key]}</option>
+                    ))}
+                    </select>
+                </label>
+                <label>
+                    Is an Expense?
+                    <input
+                    onChange={this.handleInputChange}
+                    checked={this.state.isExpense}
+                    type="checkbox"
+                    name="isExpense" />
+                </label>
+                <input type="submit" value="Submit" />
+            </form>        
+        );                    
+      }
+
+
+
 }
 
-export default TransactionForm;
+export {ITransactionForm, TransactionForm};

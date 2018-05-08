@@ -1,22 +1,48 @@
 import { connect, Dispatch } from "react-redux";
-import { addTransaction } from "../../actions";
-import { IAddTransaction, IState, ITransaction } from "../../types";
-import TransactionForm from "../TransactionForm";
+import { addTransaction, updateTransaction } from "../../actions";
+import { ExpenseCategory, IRootState, ITransaction, ITransAddUpd } from "../../types";
+import { utils } from "../../utilities/stateUtils";
+import { TransactionForm } from "../TransactionForm";
 
 interface ImapStateToProps {
-    date: string
+    transaction: ITransaction,
+    isEditMode: boolean
 }
 
-const mapStateToProps = (state: IState): ImapStateToProps => ({
-    date: state.currentDate
-});
+const mapStateToProps = (state: IRootState): ImapStateToProps => {
+    if(state.editTransID !== 0){
+        return {
+            transaction: utils.getTransByID(state, state.editTransID),
+            isEditMode: true
+        }        
+    } else {
+        return {
+            transaction: {
+                id: state.nextTransID,
+                date: state.currentDate,        
+                order: state.nextOrderID,
+                name: "",
+                amount: 0,
+                category: ExpenseCategory.OFFICE,
+                isExpense: true        
+            },
+            isEditMode: false
+        }  
+    }
+}
 
 interface IDispatchToProps {
-    onTransactionSubmit: (transaction: ITransaction) => void
+    onTransactionSubmit: (transaction: ITransaction) => void,
+    onTransactionUpdate: (transaction: ITransaction) => void
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<IAddTransaction>): IDispatchToProps => ({
-    onTransactionSubmit: (transaction: ITransaction) => dispatch(addTransaction(transaction))
+// interface IOwnProps {
+//     isEditMode: boolean
+// }
+
+const mapDispatchToProps = (dispatch: Dispatch<ITransAddUpd>, ownProps: any): IDispatchToProps => ({
+    onTransactionSubmit: (transaction: ITransaction) => dispatch(addTransaction(transaction)),
+    onTransactionUpdate: (transaction: ITransaction) => dispatch(updateTransaction(transaction))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TransactionForm);
+export default connect<ImapStateToProps, IDispatchToProps>(mapStateToProps, mapDispatchToProps)(TransactionForm);

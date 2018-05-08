@@ -1,6 +1,6 @@
-import { IState, TDate } from "../types";
+import { IRootState, ITransaction, TDate, TTransactionID } from "../types";
 
-const getTransByDate = (state: IState, date: TDate = state.currentDate) => {
+const getTransByDate = (state: IRootState, date: TDate = state.currentDate) => {
     const transactionIDs = state.transactions.byDate[state.currentDate];
     if (transactionIDs) {
         return transactionIDs.map(transactionID => state.transactions.byID[transactionID]);
@@ -9,6 +9,9 @@ const getTransByDate = (state: IState, date: TDate = state.currentDate) => {
     }
 };
 
+const getTransByID = (state: IRootState, id: TTransactionID): ITransaction => ( state.transactions.byID[id]);
+
 export const utils = {
-    getTransByDate
+    getTransByDate,
+    getTransByID    
 };
