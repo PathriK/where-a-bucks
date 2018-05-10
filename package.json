@@ -14,6 +14,7 @@
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "lint": "tslint src/*.ts -t verbose",
+    "serve": "http-server ./service --ext=json",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },
@@ -23,6 +24,7 @@
     "@types/react": "^16.3.13",
     "@types/react-dom": "^16.0.5",
     "@types/react-redux": "^5.0.19",
+    "http-server": "^0.11.1",
     "redux-devtools": "^3.4.1",
     "redux-devtools-extension": "^2.13.2",
     "typescript": "^2.8.3"

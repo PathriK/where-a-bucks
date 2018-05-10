@@ -17,8 +17,33 @@
                     "activeOnStart": true,
                     "beginsPattern": "^.*Compiling.*$",
                     "endsPattern": "^.*Compiled successfully!.*$"
-                },
+                }
             }
+        },
+        {
+            "label": "serve",
+            "type": "npm",
+            "script": "serve",
+            "isBackground": true,
+            "problemMatcher":{
+                "owner": "npm",
+                "pattern": {
+                    "regexp": "_____"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "^.*Starting up.*$",
+                    "endsPattern": "^.*Hit CTRL-C.*$"
+                }
+            }
+        },
+        {
+            "label": "start-nd-serve",
+            "isBackground": true,
+            "dependsOn": [
+                "serve",
+                "npm-start"
+            ]
         },
         {
             "label": "linting",
